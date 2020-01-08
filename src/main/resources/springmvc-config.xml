@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+    <!--开启包扫描-->
+    <context:component-scan base-package="com.aaa.ssm.controller"></context:component-scan>
+
+    <!--mvc:annotation-driven 作用：
+        Spring会默认帮我们注册处理请求，参数和返回值的类
+      会自动注册RequestMappingHandlerMapping、RequestMappingHandlerAdapter 与ExceptionHandlerExceptionResolver 三个bean。
+        支持使用 ConversionService 实例对表单参数进行类型转换；
+        支持使用 @NumberFormat annotation、@DateTimeFormat；
+        支持使用 @RequestBody 和 @ResponseBody 注解
+     -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!--配置springmvc的拦截器-->
+    <!--<mvc:interceptors>
+        &lt;!&ndash;登录拦截器&ndash;&gt;
+        <mvc:interceptor>
+            &lt;!&ndash;拦截路径配置  所有的Controller 进行拦截
+            /*/* 拦截两级目录 &ndash;&gt;
+           &lt;!&ndash; <mvc:mapping path="/*/*.do"/>&ndash;&gt;
+            <mvc:mapping path="/**"/>
+            &lt;!&ndash;对上面拦截后的请求交给下面登录拦截器bean处理&ndash;&gt;
+            <bean class="com.aaa.ssm.interceptor.LoginInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>-->
+    <!--映射处理器，处理适配器不配置不代表没有，使用默认的了-->
+    <!--统一异常处理-->
+    <!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        &lt;!&ndash;默认错误跳转页面 最终还是视图解析解析&ndash;&gt;
+        <property name="defaultErrorView" value="error"></property>
+        &lt;!&ndash;定义返回异常的属性名称，如果不定义，默认为exception&ndash;&gt;
+        <property name="exceptionAttribute" value="ex"></property>
+    </bean>-->
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+</beans>
